@@ -1,0 +1,16 @@
+name: Protect PROD Main Branch
+on:
+  push:
+    branches: [main]
+jobs:
+  protect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pusher
+        run: |
+          # Admins 팀 멤버 목록
+          ADMINS=("admin-user1" "admin-user2")
+          if [[ ! " ${ADMINS[*]} " =~ " ${{ github.actor }} " ]]; then
+            echo "Direct push to main in reservation-prod is not allowed for ${{ github.actor }}!"
+            exit 1
+          fi
